@@ -1,37 +1,48 @@
 import { getAptsResult } from '@/mockGen';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen, waitFor } from '@testing-library/react';
-import { ReactNode } from 'react';
+import { mockFetchResolve, render, screen, waitFor } from '@/test/utils';
 import { Location } from '.';
 
-const queryClient = new QueryClient();
-const wrapper = ({ children }: { children: ReactNode }) => (
-  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-);
+describe('<Location>', () => {
+  const mock: getAptsResult = {
+    location: 'mock location',
+    apt: [
+      ['mockId', 'mockName'],
+      ['mockId2', 'mockName2'],
+    ],
+  };
 
-function mockFetchResolve<T = unknown>(value: T) {
-  // @ts-ignore
-  globalThis.fetch = jest.fn().mockResolvedValue({
-    json: () => Promise.resolve(value),
-  });
-}
-
-describe('Name of the group', () => {
-  it('should ', async () => {
-    const mock: getAptsResult = {
-      location: 'mock location',
-      apt: [['mockId', 'mockName']],
-    };
+  beforeEach(() => {
     mockFetchResolve(mock);
 
-    render(<Location id={'1'} />, { wrapper });
+    render(<Location id={'1'} />);
+  });
 
+  it('renders the location name', async () => {
     await waitFor(() => {
       expect(screen.getByText(mock.location)).toBeInTheDocument();
     });
+  });
 
-    const aptButton = screen.getByText(mock.apt[0][1]);
-    expect(aptButton).toBeInTheDocument();
-    expect(aptButton).toHaveAttribute('href', `/apt/${mock.apt[0][0]}`);
+  it('renders on apartment button', async () => {
+    await waitFor(() => {
+      const aptButton = screen.getByText(mock.apt[0][1]);
+      expect(aptButton).toBeInTheDocument();
+      expect(aptButton).toHaveAttribute('href', `/apt/${mock.apt[0][0]}`);
+    });
+  });
+
+  it('renders the go back button', async () => {
+    await waitFor(() => {
+      expect(screen.getByRole('link', { name: /</ })).toBeInTheDocument();
+    });
+  });
+
+  it('renders two apartment buttons', async () => {
+    const goBackButton = 1;
+    await waitFor(() => {
+      expect(screen.getAllByRole('link')).toHaveLength(
+        mock.apt.length + goBackButton,
+      );
+    });
   });
 });

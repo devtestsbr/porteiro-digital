@@ -19,7 +19,9 @@ describe('<Location>', () => {
 
   it('renders the location name', async () => {
     await waitFor(() => {
-      expect(screen.getByText(mock.location)).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { name: RegExp(mock.location) }),
+      ).toBeInTheDocument();
     });
   });
 

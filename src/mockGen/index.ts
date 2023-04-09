@@ -17,7 +17,7 @@ function mockGenerator() {
 
   function getOneApt(aptId: string) {
     const location = aptId.slice(0, 2);
-    return getApts(location)?.apt.find(a => a[0] === aptId);
+    return getApts(location)?.apt.find(a => a[0] === aptId) as [string, string];
   }
 
   return {
@@ -35,3 +35,8 @@ function genArr(string: string, len = 5) {
 }
 
 export default mockGenerator();
+
+type mockGenTypes = ReturnType<typeof mockGenerator>;
+export type locations = mockGenTypes['locations'];
+export type getAptsResult = Exclude<ReturnType<mockGenTypes['getApts']>, null>;
+export type getOneAptResult = ReturnType<mockGenTypes['getOneApt']>;

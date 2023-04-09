@@ -1,10 +1,10 @@
 import { MyH2 } from '@/components/MyH2';
+import { getAptsResult } from '@/mockGen';
 import { useQuery } from '@tanstack/react-query';
 
 const fetchLocation = async (id: string) => {
   const response = await fetch(`/api/apartments/${id}`);
-  const data: { location: string; apt: [string, string][] } =
-    await response.json();
+  const data: getAptsResult = await response.json();
   return data;
 };
 

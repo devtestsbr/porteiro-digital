@@ -2,6 +2,8 @@ import React, { ReactNode } from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { RequestMethod, RequestOptions, createMocks } from 'node-mocks-http';
 
 const queryClient = new QueryClient();
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -25,3 +27,10 @@ export { userEvent };
 
 // override render method
 export { customRender as render };
+
+export function mockRequestResponse(
+  method: RequestMethod = 'GET',
+  body: RequestOptions['body'] = undefined,
+) {
+  return createMocks<NextApiRequest, NextApiResponse>({ method, body });
+}

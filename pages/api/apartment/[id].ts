@@ -9,6 +9,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === 'POST') {
+    const { name, message, contact } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required' });
+    }
+
+    if (!message) {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+
+    if (!contact) {
+      return res.status(400).json({ error: 'Contact is required' });
+    }
+
     console.log(await new Promise((resolve) => {
       setTimeout(() => { resolve(req.body); }, 1000);
     }));

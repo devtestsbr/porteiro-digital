@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -19,6 +20,8 @@ const customRender = (ui: Parameters<typeof render>['0']) =>
 
 // re-export everything
 export * from '@testing-library/react';
+
+export { userEvent };
 
 // override render method
 export { customRender as render };
